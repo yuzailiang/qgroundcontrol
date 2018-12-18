@@ -382,7 +382,7 @@ FORMS += \
 
 !MobileBuild {
 FORMS += \
-    src/ui/Linechart.ui \
+    src/ui/linechart/Linechart.ui \
     src/ui/MultiVehicleDockWidget.ui \
     src/ui/QGCHilConfiguration.ui \
     src/ui/QGCHilFlightGearConfiguration.ui \
@@ -434,6 +434,7 @@ DebugBuild { PX4FirmwarePlugin { PX4FirmwarePluginFactory  { APMFirmwarePlugin {
         src/MissionManager/CameraCalcTest.h \
         src/MissionManager/CameraSectionTest.h \
         src/MissionManager/CorridorScanComplexItemTest.h \
+        src/MissionManager/FWLandingPatternTest.h \
         src/MissionManager/MissionCommandTreeTest.h \
         src/MissionManager/MissionControllerManagerTest.h \
         src/MissionManager/MissionControllerTest.h \
@@ -475,6 +476,7 @@ DebugBuild { PX4FirmwarePlugin { PX4FirmwarePluginFactory  { APMFirmwarePlugin {
         src/MissionManager/CameraCalcTest.cc \
         src/MissionManager/CameraSectionTest.cc \
         src/MissionManager/CorridorScanComplexItemTest.cc \
+        src/MissionManager/FWLandingPatternTest.cc \
         src/MissionManager/MissionCommandTreeTest.cc \
         src/MissionManager/MissionControllerManagerTest.cc \
         src/MissionManager/MissionControllerTest.cc \
@@ -597,12 +599,15 @@ HEADERS += \
     src/Settings/AutoConnectSettings.h \
     src/Settings/BrandImageSettings.h \
     src/Settings/FlightMapSettings.h \
-    src/Settings/GuidedSettings.h \
+    src/Settings/FlyViewSettings.h \
+    src/Settings/PlanViewSettings.h \
     src/Settings/RTKSettings.h \
     src/Settings/SettingsGroup.h \
     src/Settings/SettingsManager.h \
     src/Settings/UnitsSettings.h \
     src/Settings/VideoSettings.h \
+    src/ShapeFileHelper.h \
+    src/SHPFileHelper.h \
     src/Terrain/TerrainQuery.h \
     src/TerrainTile.h \
     src/Vehicle/MAVLinkLogManager.h \
@@ -795,12 +800,15 @@ SOURCES += \
     src/Settings/AutoConnectSettings.cc \
     src/Settings/BrandImageSettings.cc \
     src/Settings/FlightMapSettings.cc \
-    src/Settings/GuidedSettings.cc \
+    src/Settings/FlyViewSettings.cc \
+    src/Settings/PlanViewSettings.cc \
     src/Settings/RTKSettings.cc \
     src/Settings/SettingsGroup.cc \
     src/Settings/SettingsManager.cc \
     src/Settings/UnitsSettings.cc \
     src/Settings/VideoSettings.cc \
+    src/ShapeFileHelper.cc \
+    src/SHPFileHelper.cc \
     src/Terrain/TerrainQuery.cc \
     src/TerrainTile.cc\
     src/Vehicle/MAVLinkLogManager.cc \
@@ -914,13 +922,13 @@ HEADERS+= \
     src/Vehicle/Vehicle.h \
     src/VehicleSetup/VehicleComponent.h \
 
-!MobileBuild {
+!MobileBuild { !NoSerialBuild {
     HEADERS += \
         src/VehicleSetup/Bootloader.h \
         src/VehicleSetup/FirmwareImage.h \
         src/VehicleSetup/FirmwareUpgradeController.h \
         src/VehicleSetup/PX4FirmwareUpgradeThread.h \
-}
+}}
 
 SOURCES += \
     src/AutoPilotPlugins/AutoPilotPlugin.cc \
@@ -940,13 +948,13 @@ SOURCES += \
     src/Vehicle/Vehicle.cc \
     src/VehicleSetup/VehicleComponent.cc \
 
-!MobileBuild {
+!MobileBuild { !NoSerialBuild {
     SOURCES += \
         src/VehicleSetup/Bootloader.cc \
         src/VehicleSetup/FirmwareImage.cc \
         src/VehicleSetup/FirmwareUpgradeController.cc \
         src/VehicleSetup/PX4FirmwareUpgradeThread.cc \
-}
+}}
 
 # ArduPilot FirmwarePlugin
 
@@ -970,6 +978,7 @@ APMFirmwarePlugin {
         src/AutoPilotPlugins/APM/APMHeliComponent.h \
         src/AutoPilotPlugins/APM/APMLightsComponent.h \
         src/AutoPilotPlugins/APM/APMSubFrameComponent.h \
+        src/AutoPilotPlugins/APM/APMMotorComponent.h \
         src/AutoPilotPlugins/APM/APMPowerComponent.h \
         src/AutoPilotPlugins/APM/APMRadioComponent.h \
         src/AutoPilotPlugins/APM/APMSafetyComponent.h \
@@ -996,6 +1005,7 @@ APMFirmwarePlugin {
         src/AutoPilotPlugins/APM/APMHeliComponent.cc \
         src/AutoPilotPlugins/APM/APMLightsComponent.cc \
         src/AutoPilotPlugins/APM/APMSubFrameComponent.cc \
+        src/AutoPilotPlugins/APM/APMMotorComponent.cc \
         src/AutoPilotPlugins/APM/APMPowerComponent.cc \
         src/AutoPilotPlugins/APM/APMRadioComponent.cc \
         src/AutoPilotPlugins/APM/APMSafetyComponent.cc \

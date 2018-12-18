@@ -131,9 +131,6 @@ MainWindow::MainWindow()
     emit initStatusChanged(tr("Setting up user interface"), Qt::AlignLeft | Qt::AlignBottom, QColor(62, 93, 141));
 
     _ui.setupUi(this);
-    // Make sure tool bar elements all fit before changing minimum width
-    setMinimumWidth(1024);
-    setMinimumHeight(620);
     configureWindowName();
 
     // Setup central widget with a layout to hold the views
@@ -185,19 +182,6 @@ MainWindow::MainWindow()
 
     // Create actions
     connectCommonActions();
-    // Connect user interface devices
-#ifdef QGC_MOUSE_ENABLED_WIN
-    emit initStatusChanged(tr("Initializing 3D mouse interface"), Qt::AlignLeft | Qt::AlignBottom, QColor(62, 93, 141));
-    mouseInput = new Mouse3DInput(this);
-    mouse = new Mouse6dofInput(mouseInput);
-#endif //QGC_MOUSE_ENABLED_WIN
-
-#if QGC_MOUSE_ENABLED_LINUX
-    emit initStatusChanged(tr("Initializing 3D mouse interface"), Qt::AlignLeft | Qt::AlignBottom, QColor(62, 93, 141));
-
-    mouse = new Mouse6dofInput(this);
-    connect(this, &MainWindow::x11EventOccured, mouse, &Mouse6dofInput::handleX11Event);
-#endif //QGC_MOUSE_ENABLED_LINUX
 
     // Set low power mode
     enableLowPowerMode(_lowPowerMode);
@@ -360,7 +344,7 @@ bool MainWindow::_createInnerDockWidget(const QString& widgetName)
 
 void MainWindow::_hideAllDockWidgets(void)
 {
-    foreach(QGCDockWidget* dockWidget, _mapName2DockWidget) {
+    for(QGCDockWidget* dockWidget: _mapName2DockWidget) {
         dockWidget->setVisible(false);
     }
 }
@@ -461,7 +445,7 @@ void MainWindow::_vehicleAdded(Vehicle* vehicle)
 void MainWindow::_storeCurrentViewState(void)
 {
 #ifndef __mobile__
-    foreach(QGCDockWidget* dockWidget, _mapName2DockWidget) {
+    for(QGCDockWidget* dockWidget: _mapName2DockWidget) {
         dockWidget->saveSettings();
     }
 #endif
@@ -477,14 +461,6 @@ void MainWindow::saveLastUsedConnection(const QString connection)
     key += "/LAST_CONNECTION";
     settings.setValue(key, connection);
 }
-
-#ifdef QGC_MOUSE_ENABLED_LINUX
-bool MainWindow::x11Event(XEvent *event)
-{
-    emit x11EventOccured(event);
-    return false;
-}
-#endif // QGC_MOUSE_ENABLED_LINUX
 
 #ifdef UNITTEST_BUILD
 void MainWindow::_showQmlTestWidget(void)
@@ -503,7 +479,7 @@ void MainWindow::_loadVisibleWidgetsSettings(void)
     if (!widgets.isEmpty()) {
         QStringList nameList = widgets.split(",");
 
-        foreach (const QString &name, nameList) {
+        for (const QString &name: nameList) {
             _showDockWidget(name, true);
         }
     }
@@ -514,7 +490,7 @@ void MainWindow::_storeVisibleWidgetsSettings(void)
     QString widgetNames;
     bool firstWidget = true;
 
-    foreach (const QString &name, _mapName2DockWidget.keys()) {
+    for (const QString &name: _mapName2DockWidget.keys()) {
         if (_mapName2DockWidget[name]->isVisible()) {
             if (!firstWidget) {
                 widgetNames += ",";

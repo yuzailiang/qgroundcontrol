@@ -56,10 +56,15 @@
 #endif
 
 #ifndef __mobile__
+#ifndef NO_SERIAL_LINK
     Q_DECLARE_METATYPE(QGCSerialPortInfo)
+#endif
 #endif
 
 #ifdef Q_OS_WIN
+
+#include <windows.h>
+
 /// @brief CRT Report Hook installed using _CrtSetReportHook. We install this hook when
 /// we don't want asserts to pop a dialog on windows.
 int WindowsCrtReportHook(int reportType, char* message, int* returnValue)
@@ -156,7 +161,9 @@ int main(int argc, char *argv[])
 #endif
     qRegisterMetaType<QAbstractSocket::SocketError>();
 #ifndef __mobile__
+#ifndef NO_SERIAL_LINK
     qRegisterMetaType<QGCSerialPortInfo>();
+#endif
 #endif
 
     // We statically link our own QtLocation plugin

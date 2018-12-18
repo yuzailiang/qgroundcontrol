@@ -29,15 +29,16 @@ class ScreenToolsController : public QQuickItem
 public:
     ScreenToolsController();
 
-    Q_PROPERTY(bool     isAndroid           READ isAndroid       CONSTANT)
-    Q_PROPERTY(bool     isiOS               READ isiOS           CONSTANT)
-    Q_PROPERTY(bool     isMobile            READ isMobile        CONSTANT)
-    Q_PROPERTY(bool     isDebug             READ isDebug         CONSTANT)
-    Q_PROPERTY(bool     isMacOS             READ isMacOS         CONSTANT)
-    Q_PROPERTY(bool     isLinux             READ isLinux         CONSTANT)
-    Q_PROPERTY(bool     isWindows           READ isWindows       CONSTANT)
-    Q_PROPERTY(QString  iOSDevice           READ iOSDevice       CONSTANT)
-    Q_PROPERTY(QString  fixedFontFamily     READ fixedFontFamily CONSTANT)
+    Q_PROPERTY(bool     isAndroid           READ isAndroid          CONSTANT)
+    Q_PROPERTY(bool     isiOS               READ isiOS              CONSTANT)
+    Q_PROPERTY(bool     isMobile            READ isMobile           CONSTANT)
+    Q_PROPERTY(bool     isDebug             READ isDebug            CONSTANT)
+    Q_PROPERTY(bool     isMacOS             READ isMacOS            CONSTANT)
+    Q_PROPERTY(bool     isLinux             READ isLinux            CONSTANT)
+    Q_PROPERTY(bool     isWindows           READ isWindows          CONSTANT)
+    Q_PROPERTY(bool     isSerialAvailable   READ isSerialAvailable  CONSTANT)
+    Q_PROPERTY(QString  iOSDevice           READ iOSDevice          CONSTANT)
+    Q_PROPERTY(QString  fixedFontFamily     READ fixedFontFamily    CONSTANT)
 
     // Returns current mouse position
     Q_INVOKABLE int mouseX(void) { return QCursor::pos().x(); }
@@ -49,19 +50,19 @@ public:
     bool    isMobile            () { return qgcApp()->fakeMobile(); }
 #endif
 
-#if defined (__android__)
+#if defined (Q_OS_ANDROID)
     bool    isAndroid           () { return true;  }
     bool    isiOS               () { return false; }
     bool    isLinux             () { return false; }
     bool    isMacOS             () { return false; }
     bool    isWindows           () { return false; }
-#elif defined(__ios__)
+#elif defined(Q_OS_IOS)
     bool    isAndroid           () { return false; }
     bool    isiOS               () { return true; }
     bool    isLinux             () { return false; }
     bool    isMacOS             () { return false; }
     bool    isWindows           () { return false; }
-#elif defined(__macos__)
+#elif defined(Q_OS_MAC)
     bool    isAndroid           () { return false; }
     bool    isiOS               () { return false; }
     bool    isLinux             () { return false; }
@@ -85,6 +86,12 @@ public:
     bool    isLinux             () { return false; }
     bool    isMacOS             () { return false; }
     bool    isWindows           () { return false; }
+#endif
+
+#if defined(NO_SERIAL_LINK)
+    bool    isSerialAvailable   () { return false; }
+#else
+    bool    isSerialAvailable   () { return true; }
 #endif
 
 #ifdef QT_DEBUG
